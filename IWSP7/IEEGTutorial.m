@@ -15,7 +15,7 @@ addpath('../')
 
 % Once you've signed up and have been approved on the ieeg.org website, you can establish a key that will give you access permissions to connect to our server and interact with datasets'
 % This creates a .bin file that contains your login (unencrypted)
-% IEEGSession.createPwdFile('username','password')
+IEEGSession.createPwdFile('username','password')
 
 %%
 % First, create an IEEGSession object, which is a Matlab class. This contains your login credentials a well as a dataset that you'd like to open.
@@ -131,13 +131,15 @@ parfor i = 1:2
 end
 
 %% Working with snapshots
-% inclCh - session.data(1).rawChannels(1:16)
+% inclCh = session.data(1).rawChannels(1:16)
 % session.data(1).deriveDataset('newDatasetName',inclCh)
 
 %% Advanced
 % 
 session.data.methods
 session.data(1).get_tsdetails.methods
+session.data.setFilter
+session.data.setResample
 
 
 
@@ -157,7 +159,7 @@ subjectID = 'IWSP7test'
 fs = session.data.sampleRate
 
     %% open mef
-    mw = edu.mayo.msel.mefwriter.MefWriter([subjectID '.mef'], mefBlockSize, fs,mefGapThresh); %10000 samples
+mw = edu.mayo.msel.mefwriter.MefWriter([subjectID '.mef'], mefBlockSize, fs,mefGapThresh); %10000 samples
 
     %% write meta data to mef
     mw.setVoltageConversionFactor(1) % data * CF = uV
@@ -176,6 +178,7 @@ fs = session.data.sampleRate
     mw.writeData(data(:,1), ts, length(data(:,1)));
     mw.close
     mw
-end
+    
+ % IEEG CLI
 
 %
